@@ -1,0 +1,44 @@
+#/usr/bin/sh
+# vi: ft=sh
+
+START_TIME=`date +"%Y/%m/%d %H:%M:%S"`
+echo "[$START_TIME] Start to set up your $uname."
+
+if [ `uname` = "Darwin" ]; then
+    if type xcodebuild > /dev/null 2>&1; then
+        echo "[pass] xcodebuild already installed"
+    else
+        echo "[install] xcodebuild"
+        xcodebuild -license
+    fi
+
+    if type xcode-select > /dev/null 2>&1; then
+        echo "[pass] xcode-select already installed"
+    else
+        echo "[install] xcode-select"
+        xcode-select --install
+    fi
+fi
+
+
+# Download MItamae
+if [ `uname` = "Darwin" ]; then
+    bin_name="mitamae-x86_64-darwin"
+elif [ `uname` = "Linux" ]; then
+    bin_name="mitamae-x86_64-linux"
+fi
+
+if [ -e $(cd $(dirname $0) && pwd)/../$bin_name ]; then
+    echo "[pass] MItamae already installed"
+else
+    curl -L https://github.com/k0kubun/mitamae/releases/download/v1.1.2/$bin_name.tar.gz | tar zx
+fi
+
+case `uname` in
+    "Darwin" ) echo `bundle exec ./$bin_name local --node-yaml nodes/darwin.yml roles/darwin.rb` ;;
+    "Linux"  ) echo `bundle exec ./$bin_name local roles/linux.rb` ;;
+    *        ) echo "Sorry, not support `uname`"
+esac
+
+END_TIME=`date +"%Y/%m/%d %H:%M:%S"`
+echo "[$END_TIME] End to set up."
