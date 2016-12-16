@@ -35,8 +35,8 @@ else
 fi
 
 case `uname` in
-    "Darwin" ) echo `bundle exec ./$bin_name local --node-yaml nodes/darwin.yml roles/darwin.rb` ;;
-    "Linux"  ) echo `bundle exec ./$bin_name local roles/linux.rb` ;;
+    "Darwin" ) echo `./$bin_name local --node-yaml nodes/darwin.yml roles/darwin.rb` ;;
+    "Linux"  ) echo `./$bin_name local roles/linux.rb` ;;
     *        ) echo "Sorry, not support `uname`"
 esac
 
